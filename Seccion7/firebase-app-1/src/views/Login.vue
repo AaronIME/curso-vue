@@ -27,6 +27,8 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { useUserStore } from '../stores/user'
+import { message } from 'ant-design-vue';
+
 
 const userStore = useUserStore()
 
@@ -46,9 +48,28 @@ const formState = reactive({
 //     await userStore.loginUser(formState.email, formState.password)
 // }
 
+
+
 const onFinish = async (values) => {
     console.log('Success:', values);
-    await userStore.loginUser(formState.email, formState.password)
+
+    const error = await userStore.loginUser(formState.email, formState.password)
+    if(!error){
+        message.success('Inicio de sesion existoso')
+        return
+    }
+
+    switch(error){
+        case 'auth/user-not-found':
+            message.warning('No existe esa cuenta')
+        break;
+        case 'auth/wrong-password':
+            message.warning('Contraseña invalida');
+        break;
+        default:
+            message.warning('error inesperado');
+
+    }
 };
 
 const onFinishFailed = (errorInfo) => {

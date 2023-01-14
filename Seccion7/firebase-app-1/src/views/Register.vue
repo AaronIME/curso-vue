@@ -37,6 +37,7 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { useUserStore } from '../stores/user'
+import { message } from 'ant-design-vue';
 
 const formState = reactive({
     email: '',
@@ -62,7 +63,20 @@ const userStore = useUserStore()
 
 const onFinish = async (values) => {
     console.log('Success:', values);
-    await userStore.registerUser(formState.email, formState.password)
+    const error = await userStore.registerUser(formState.email, formState.password)
+    if(!error){
+        message.success('Cuenta creada con exito!')
+        return
+    }
+
+    switch(error){
+        case 'auth/email-already-in-use':
+            message.warning('Cuenta ya registrada')
+        break;
+        default:
+            message.warning('error inesperado');
+
+    }
 };
 
 const onFinishFailed = (errorInfo) => {
