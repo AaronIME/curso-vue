@@ -1,20 +1,22 @@
 <template>
+    
     <a-row>
+        
         <a-col span="12" offset="6">
-            <h1>Login</h1>
+            <h1 class="text-center">Login</h1>
             <!-- @submit.prevent="handleSubmit" -->
             <a-form name="basicLogin" autocomplete="off" layout="vertical" :model="formState" @finish="onFinish"
                 @finishFailed="onFinishFailed">
                 <a-form-item name="email" label="Ingesa tu correo"
-                    :rules="[{ required: true, whitespace:true, type:'email', message: 'Ingresa un email' }]">
+                    :rules="[{ required: true, whitespace: true, type: 'email', message: 'Ingresa un email' }]">
                     <a-input v-model:value="formState.email"></a-input>
                 </a-form-item>
-                <a-form-item  name="password" label="Ingesa contraseña"
-                    :rules="[{ whitespace:true, required: true, min:6, message: 'Ingresa una contraseña con minimo 6 caracteres' }]">
+                <a-form-item name="password" label="Ingesa contraseña"
+                    :rules="[{ whitespace: true, required: true, min: 6, message: 'Ingresa una contraseña con minimo 6 caracteres' }]">
                     <a-input-password v-model:value="formState.password"></a-input-password>
                 </a-form-item>
                 <a-form-item>
-                    <a-button type="submit" html-type="submit" :disabled="userStore.loadingUser">Ingresar</a-button>
+                    <a-button :loading="userStore.loadingUser" type="submit" html-type="submit" :disabled="userStore.loadingUser">Ingresar</a-button>
                 </a-form-item>
                 <!-- <input type="email" placeholder="Ingrese email" v-model.trim="email"> -->
                 <!-- <input type="password" placeholder="Ingrese contraseña" v-model.trim="password"> -->
@@ -54,18 +56,18 @@ const onFinish = async (values) => {
     console.log('Success:', values);
 
     const error = await userStore.loginUser(formState.email, formState.password)
-    if(!error){
+    if (!error) {
         message.success('Inicio de sesion existoso')
         return
     }
 
-    switch(error){
+    switch (error) {
         case 'auth/user-not-found':
             message.warning('No existe esa cuenta')
-        break;
+            break;
         case 'auth/wrong-password':
             message.warning('Contraseña invalida');
-        break;
+            break;
         default:
             message.warning('error inesperado');
 

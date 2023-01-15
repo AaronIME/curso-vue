@@ -7,7 +7,7 @@
 <template>
     <a-row>
         <a-col span="12" offset="6">
-            <h1>Register</h1>
+            <h1 class="text-center">Register</h1>
             <!-- @submit.prevent="handleSubmit" -->
             <a-form name="basicLogin" autocomplete="off" layout="vertical" :model="formState" @finish="onFinish"
                 @finishFailed="onFinishFailed">
@@ -23,7 +23,7 @@
                     <a-input-password v-model:value="formState.repassword"></a-input-password>
                 </a-form-item>
                 <a-form-item>
-                    <a-button type="submit" html-type="submit" :disabled="userStore.loadingUser">Registrarme</a-button>
+                    <a-button :loading="userStore.loadingUser" type="submit" html-type="submit" :disabled="userStore.loadingUser">Registrarme</a-button>
                 </a-form-item>
                 <!-- <input type="email" placeholder="Ingrese email" v-model.trim="email"> -->
                 <!-- <input type="password" placeholder="Ingrese contraseña" v-model.trim="password"> -->
