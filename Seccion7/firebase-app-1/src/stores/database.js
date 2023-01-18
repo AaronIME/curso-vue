@@ -1,5 +1,5 @@
 import {
-    addDoc,
+    setDoc,
     collection,
     deleteDoc,
     doc,
@@ -22,6 +22,22 @@ export const useDatabaseStore = defineStore("database", {
         loading:false,
     }),
     actions: {
+        async getUrl(id) {
+            
+            try {
+                const docRef = doc(db, "urls", id);
+                const docSpan = await getDoc(docRef);
+
+                if (!docSpan.exists()) {
+                    return false;
+                }
+
+                return docSpan.data().name;
+            } catch (error) {
+                console.log(error.message);
+            } finally {
+            }
+        },
         async getUrls() {
             if (this.documents.length !== 0) {
                 return;
@@ -56,11 +72,10 @@ export const useDatabaseStore = defineStore("database", {
                     short: nanoid(6),
                     user: auth.currentUser.uid,
                 };
-                const docRef = await addDoc(collection(db, "urls"), objetoDoc);
-                // console.log(docRef.id);
+                await setDoc(doc(db, "urls", objetoDoc.short), objetoDoc);
                 this.documents.push({
                     ...objetoDoc,
-                    id: docRef.id,
+                    id: objetoDoc.short,
                 });
             } catch (error) {
                 console.log(error);

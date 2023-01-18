@@ -94,6 +94,7 @@ export const useUserStore = defineStore("userStore", {
         //     }
         // },
         async updateUser(displayName, imagen) {
+            this.loadingUser = true;
             try {
                 if (imagen) {
                     console.log(imagen);
@@ -116,6 +117,8 @@ export const useUserStore = defineStore("userStore", {
             } catch (error) {
                 console.log(error);
                 return error
+            } finally{
+                this.loadingUser = false;
             }
         },
         async loginUser(email, password) {
@@ -128,8 +131,6 @@ export const useUserStore = defineStore("userStore", {
                 );
 
                 await this.setUser(user)
-
-
 
                 router.push("/");
                 // this.userData = { email: user.email, uid: user.uid };
