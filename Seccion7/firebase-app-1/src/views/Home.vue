@@ -79,10 +79,10 @@ const copiarPortapapeles = (id) => {
     console.log(path);
 
     navigator.clipboard.writeText(path).then(()=>{
-        
+        return message.success("Copiado al portapapeles")
     })
     .catch(error => {
-
+        return message.error("Ocurrio un error al copiar al portapapeles")
     });
 }
 
