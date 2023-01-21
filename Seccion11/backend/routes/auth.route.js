@@ -1,11 +1,12 @@
-import express from 'express';
-import { login, register } from '../controllers/auth.controller.js'
+import { Router } from 'express';
+import { infoUser, login, register, refreshToken, logout } from '../controllers/auth.controller.js'
 import { body } from 'express-validator';
 import { validationResultExpress } from '../middlewares/validationResultExpress.js';
+import { requireToken } from '../middlewares/requireToken.js';
 
 
 //Middleware para gestionar rutas del sitio web
-const router = express.Router()
+const router = Router()
 
 //req: lo que envia el usuario como peticion
 //res: respuesta al usuario
@@ -36,6 +37,16 @@ router.post('/register', [
         }),
     validationResultExpress
 ], register);
+
+router.get('/protected',
+[
+    requireToken
+],
+ infoUser);
+
+router.get('/refresh', refreshToken);
+
+router.get('/logout', logout);
 
 //Se exporta para utilizarlo en el archivo base
 //Con el export por default es posible asignar el nombre que se necesite

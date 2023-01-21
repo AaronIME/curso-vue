@@ -4,6 +4,8 @@ import "./database/connectdb.js"
 import authRouter from './routes/auth.route.js'
 //Levantando el primer servidor
 import express from "express";
+import cookieParser from 'cookie-parser';
+
 
 //Inicializando la aplicacion
 //Se inicializa con el metodo "express" para poder activar todos sus metodos
@@ -14,11 +16,14 @@ const app = express();
 // });
 
 //Usando middlewares
-
+app.use(cookieParser());
 //Hay que indicarle a express que vamos a recibir solicitudes json
-app.use(express.json());//#baseURL, authrouter
+app.use(express.json());
 
-app.use('/api/v1/', authRouter);//#baseURL, authrouter
+app.use('/api/v1/auth', authRouter);//#baseURL, authrouter
+
+app.use(express.static("public"));
+
 
 
 
