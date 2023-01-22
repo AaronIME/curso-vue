@@ -3,6 +3,8 @@ import { infoUser, login, register, refreshToken, logout } from '../controllers/
 import { body } from 'express-validator';
 import { validationResultExpress } from '../middlewares/validationResultExpress.js';
 import { requireToken } from '../middlewares/requireToken.js';
+import { requireRefreshToken } from '../middlewares/requireRefreshToken.js';
+import { bodyLoginValidator, bodyRegisterValidator } from '../middlewares/validatorManager.js';
 
 
 //Middleware para gestionar rutas del sitio web
@@ -15,36 +17,43 @@ const router = Router()
 // });
 
 
-router.post('/login',
-    [
-        body("email", "Formato de email invalido").trim().isEmail().normalizeEmail(),
-        body("password", "Minimo 6 caravteres").trim().isLength({ min: 6 }),
-        validationResultExpress
-    ]
-    , login);
+router.post('/login', bodyLoginValidator, login);
+// router.post('/login',
+//     [
+//         body("email", "Formato de email invalido").trim().isEmail().normalizeEmail(),
+//         body("password", "Minimo 6 caravteres").trim().isLength({ min: 6 }),
+//         validationResultExpress
+//     ]
+//     , login);
 
-router.post('/register', [
-    //NormalizeEmail: normaliza el texto
-    body("email", "Formato de email invalido").trim().isEmail().normalizeEmail(), //#Propiedad que se quiere validar, #Mensaje de error, #Validaciones
-    body("password", "Minimo 6 caravteres").trim().isLength({ min: 6 }),
-    body("password", "Formato de contraseña invalida")
-        //#value: "password" de body
-        .custom((value, { req }) => {
-            if (value !== req.body.repassword) {
-                throw new Error('No coinciden las contraseñas');
-            }
-            return value;
-        }),
-    validationResultExpress
-], register);
+router.post('/register', bodyRegisterValidator, register);
+// [
+//     //NormalizeEmail: normaliza el texto
+//     body("email", "Formato de email invalido").trim().isEmail().normalizeEmail(), //#Propiedad que se quiere validar, #Mensaje de error, #Validaciones
+//     body("password", "Minimo 6 caravteres").trim().isLength({ min: 6 }),
+//     body("password", "Formato de contraseña invalida")
+//         //#value: "password" de body
+//         .custom((value, { req }) => {
+//             if (value !== req.body.repassword) {
+//                 throw new Error('No coinciden las contraseñas');
+//             }
+//             return value;
+//         }),
+//     validationResultExpress
+// ]
+// ,register);
 
 router.get('/protected',
-[
-    requireToken
-],
- infoUser);
+    [
+        requireToken
+    ],
+    infoUser);
 
-router.get('/refresh', refreshToken);
+router.get('/refresh',
+    [
+        requireRefreshToken
+    ],
+    refreshToken);
 
 router.get('/logout', logout);
 
