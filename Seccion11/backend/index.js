@@ -22,10 +22,10 @@ const app = express();
 //cors(): por defecto indica que todos pueden acceder a nuestro sitio web
 //origin: indica de donde se esta haciendo una solicitud(DOMINIO RAIZ)
 //Arrry de dominios que se quieren aceptar
-const whiteList = [process.env.ORIGIN1];
+const whiteList = [process.env.ORIGIN1, process.env.ORIGIN2];
 app.use(cors({
     origin: function(origin, callback){
-        if(whiteList.includes(origin)){
+        if(!origin || whiteList.includes(origin)){
             return callback(null, origin);
         }
         return callback("Error de CORS origin: " + origin + " NO AUTORIZADO!")

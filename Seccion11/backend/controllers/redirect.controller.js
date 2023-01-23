@@ -2,6 +2,7 @@ import { Link } from "../models/Link.js";
 
 export const redirectLink = async(req, res) =>{
     try {
+        console.log("HOLA");
         const { nanoLink } = req.params;
         const link = await Link.findOne({nanoLink});
         if(!link){
