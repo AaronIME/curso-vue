@@ -29,7 +29,9 @@ app.use(cors({
             return callback(null, origin);
         }
         return callback("Error de CORS origin: " + origin + " NO AUTORIZADO!")
-    }
+    },
+    //Habilitamos el uso de credenciales
+    credentials: true
 }));
 //Usando middlewares
 app.use(cookieParser());
