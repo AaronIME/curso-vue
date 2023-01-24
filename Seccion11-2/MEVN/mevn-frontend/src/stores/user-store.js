@@ -6,18 +6,50 @@ export const useUserStore = defineStore('user', () => {
     const token = ref(null);
     const expiresIn = ref(null);
 
-    const access = async () => {
+    const access = async (email, password) => {
         try {
             const res = await api.post("/auth/login", {
-                email: "correo3@gmail.com",
-                password: "123456"
+                email: email,
+                password: password
             })
             token.value = res.data.token;
             expiresIn.value = res.data.expiresIn;
-            localStorage.setItem('user', true)
+            sessionStorage.setItem('user', true)
             setTime()
         } catch (error) {
-            console.log(error);
+            if (error.response) {
+                
+                throw error.response.data;
+            } else if (error.request) {
+                console.log(error.request);
+            } else {
+                console.log('Error', error.message);
+            }
+            console.log(error.config);
+        }
+    }
+
+    const register = async (email, password, repassword) => {
+        try {
+            const res = await api.post("/auth/register", {
+                email: email,
+                password: password,
+                repassword: repassword
+            })
+            token.value = res.data.token;
+            expiresIn.value = res.data.expiresIn;
+            sessionStorage.setItem('user', true)
+            setTime()
+        } catch (error) {
+            if (error.response) {
+                
+                throw error.response.data;
+            } else if (error.request) {
+                console.log(error.request);
+            } else {
+                console.log('Error', error.message);
+            }
+            console.log(error.config);
         }
     }
 
@@ -52,7 +84,7 @@ export const useUserStore = defineStore('user', () => {
             console.log(error);
         } finally {
             resetStore()
-            localStorage.removeItem('user')
+            sessionStorage.removeItem('user')
         }
     }
 
@@ -67,6 +99,7 @@ export const useUserStore = defineStore('user', () => {
         access,
         setTime,
         refreshToken,
-        logout
+        logout,
+        register
     }
 })
