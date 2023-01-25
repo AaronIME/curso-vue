@@ -5,47 +5,28 @@
     <q-btn @click="userStore.logout">Cerrar sesion</q-btn> -->
     <p>TOKEN: {{ userStore.token }}</p>
     <p>Expiracion: {{ userStore.expiresIn }}</p>
+    <q-btn @click="linkStore.createLink('https://www.google.com')">Crear link</q-btn>
+    <AddLink/>
+    <pre>
+      {{ linkStore.links }}
+    </pre>
+    <template v-for="link in linkStore.links" :key="link.id">
+      <LinkCard></LinkCard>    
+    </template>
+    
   </q-page>
 </template>
 
 <script setup>
-import { api } from 'src/boot/axios';
+import AddLink from 'src/components/AddLink.vue';
+import LinkCard from 'src/components/LinkCard.vue';
+import { useLinkStore } from 'src/stores/link-store';
 import { useUserStore } from 'src/stores/user-store';
 
+
+const linkStore = useLinkStore();
 const userStore = useUserStore();
 
-// userStore.refreshToken();
-// import { ref } from 'vue';
 
-// const access = async() => {
-//   console.log("Me diste click");
-//   await axios.post("http://localhost:5000/api/v1/auth/login", {
-//     email : "correo3@gmail.com",
-//     password : "123456"
-//   }).then((res) => {
-//     console.log(res.data);
-//   }).catch((error) => {
-//     console.log(error);
-//   })
-// }
-
-const createLink = async () => {
-  try {
-    const res = await api({
-      method: "POST",
-      url: "/links",
-      headers: {
-        "Authorization": 'Bearear ' + token.value
-      },
-      data: {
-        longLink: "https://bluuweb.github.io/desarrollo-web-bluuweb/21-03-api-rest/#requisitos"
-      }
-    })
-
-    console.log(res.data);
-  } catch (error) {
-    console.log(error);
-  }
-}
 
 </script>
