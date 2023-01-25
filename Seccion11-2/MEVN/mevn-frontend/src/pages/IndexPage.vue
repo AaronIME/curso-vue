@@ -6,12 +6,10 @@
     <p>TOKEN: {{ userStore.token }}</p>
     <p>Expiracion: {{ userStore.expiresIn }}</p>
     <q-btn @click="linkStore.createLink('https://www.google.com')">Crear link</q-btn>
-    <AddLink/>
-    <pre>
-      {{ linkStore.links }}
-    </pre>
+    <AddLink class="q-mb-xl"/>
+    
     <template v-for="link in linkStore.links" :key="link.id">
-      <LinkCard></LinkCard>    
+      <LinkCard :link="link"></LinkCard>    
     </template>
     
   </q-page>
